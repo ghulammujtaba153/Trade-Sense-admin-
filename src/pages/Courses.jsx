@@ -137,7 +137,7 @@ const Courses = () => {
                         setSelectedCourse(null);
                         setIsModalOpen(true);
                     }}
-                    className="bg-[#5A67BA] w-[200px] text-white px-4 py-2 rounded"
+                    className="bg-primary hover:scale-105 transition-transform w-[200px] text-white px-4 py-2 rounded"
                 >
                     Add Course
                 </button>
@@ -192,7 +192,7 @@ const Courses = () => {
                                     </td>
                                     <td className="px-4 py-3">
                                         <div className="font-medium">{course.title}</div>
-                                        <div className="text-sm text-gray-500 line-clamp-2">{course.description}</div>
+                                        {/* <div className="text-sm text-gray-500 line-clamp-2">{course.description}</div> */}
                                     </td>
                                     <td className="px-4 py-3">{course.duration}</td>
                                     <td className="px-4 py-3">
@@ -221,7 +221,7 @@ const Courses = () => {
                                                     setSelectedCourse(course);
                                                     setIsModalOpen(true);
                                                 }}
-                                                className="text-blue-600 hover:text-blue-800"
+                                                className="text-primary hover:scale-105 transition-tranform"
                                             >
                                                 <FiEdit />
                                             </button>

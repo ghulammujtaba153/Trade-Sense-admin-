@@ -102,8 +102,10 @@ const Dashboard = () => {
           <p className="text-3xl font-bold">{data.coursePublished}</p>
         </div>
         
-        <div className="bg-white p-6 rounded-lg shadow">
-          <Link to="/register" className='bg-gray-800 text-white p-2 rounded-md'>Create User</Link>
+        <div className="bg-white flex flex-col gap-2 p-6 rounded-lg shadow">
+          <Link to="/register" className='bg-primary text-white p-2 rounded-md'>Create User</Link>
+          <Link to="/plans" className='bg-primary text-white p-2 rounded-md'>Add plan</Link>
+          <Link to="/courses" className='bg-primary text-white p-2 rounded-md'>Add Course</Link>
         </div>
       </div>
 

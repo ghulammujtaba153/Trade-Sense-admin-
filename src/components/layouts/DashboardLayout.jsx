@@ -71,8 +71,8 @@ const DashboardLayout = () => {
                     to={item.path}
                     className={`flex items-center p-3 rounded-lg transition-colors ${
                       isActive
-                        ? 'bg-indigo-600 text-white'
-                        : 'hover:bg-gray-300 hover:text-[#5A67BA]'
+                        ? 'bg-primary text-white'
+                        : 'hover:bg-gray-300 hover:text-primary'
                     }`}
                     onClick={() => {
                       if (window.innerWidth < 640) {
@@ -91,9 +91,9 @@ const DashboardLayout = () => {
 
         {/* User Profile */}
         {(sidebarOpen || window.innerWidth >= 640) && user && (
-          <div className="absolute max-w-[250px] bottom-0 w-full p-4 bg-indigo-800">
+          <div className="absolute max-w-[250px] bottom-0 w-full p-4 bg-primary">
             <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
                 {user.name.charAt(0).toUpperCase()}
               </div>
               <div className="ml-3">

@@ -173,7 +173,7 @@ const Editors = () => {
 
                     <Link
                         to="/register"
-                        className="bg-indigo-600 flex items-center gap-2 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors w-full md:w-auto text-center"
+                        className="bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-md hover:scale-105 transition-transform transition-colors w-full md:w-auto text-center"
                     >
                         <IoMdPersonAdd/>
                         Add New User

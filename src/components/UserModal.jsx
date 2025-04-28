@@ -145,6 +145,7 @@ const UserModal = ({ isOpen, onClose, userData, onSuccess }) => {
                             >
                                 <option value="user">User</option>
                                 <option value="admin">Admin</option>
+                                <option value="editor">Editor</option>
                             </select>
                         </div>
 
@@ -188,7 +189,7 @@ const UserModal = ({ isOpen, onClose, userData, onSuccess }) => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                                className="px-4 py-2 bg-primary text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
                             >
                                 {loading ? <Loading/> : isEditMode ? 'Update' : 'Create'}
                             </button>

@@ -80,7 +80,7 @@ const Plans = () => {
                         setSelectedPlan(null);
                         setIsModalOpen(true);
                     }}
-                    className="bg-[#5A67BA] text-white px-4 py-2 rounded"
+                    className="bg-primary text-white px-4 py-2 rounded"
                 >
                     Add New Plan
                 </button>

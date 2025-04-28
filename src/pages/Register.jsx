@@ -141,7 +141,7 @@ const Register = () => {
 
         {/* Register Button */}
         <button
-          className="bg-blue-500 text-white text-sm p-2 rounded-md hover:bg-blue-600 hover:scale-105 transition-transform w-full"
+          className="bg-primary text-white text-sm p-2 rounded-md hover:scale-105 transition-transform hover:scale-105 transition-transform w-full"
           type="submit"
           disabled={loading}
         >
