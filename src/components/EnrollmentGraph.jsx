@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { API_URL } from '../config/url'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts'
+import Loading from './Loading'
+import PageLoader from './PageLoader'
 
 const EnrollmentGraph = () => {
   const [data, setData] = useState([])
@@ -41,7 +43,9 @@ const EnrollmentGraph = () => {
     fetch()
   }, [])
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <div className='flex justify-center items-center h-screen'>
+        <PageLoader/>
+    </div>
 
   return (
     <div className='mt-8'>

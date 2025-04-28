@@ -2,23 +2,31 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config/url';
 import { toast } from 'react-toastify';
+import Loading from './Loading';
 
 const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
     const [data, setData] = useState({
         name: '',
         price: 0,
         description: '',
-        category: 'monthly'
+        category: 'membership',
+        subCategory: 'monthly',
+        couponCode: '',
+        discountPercentage: '',
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
 
-    // Available plan categories
     const categories = [
-        { value: 'monthly', label: 'Monthly Package' },
-        { value: 'yearly', label: 'Yearly Package' },
-        { value: 'lifetime', label: 'Lifetime Package' }
+        { value: 'membership', label: 'Membership' },
+        { value: 'plans', label: 'Plans' },
+        { value: 'coupon', label: 'Coupon' }
+    ];
+
+    const subCategories = [
+        { value: 'monthly', label: 'Monthly' },
+        { value: 'yearly', label: 'Yearly' }
     ];
 
     useEffect(() => {
@@ -27,7 +35,10 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
                 name: planData.name || '',
                 price: planData.price || 0,
                 description: planData.description || '',
-                category: planData.category || 'monthly'
+                category: planData.category || 'membership',
+                subCategory: planData.subCategory || 'monthly',
+                couponCode: planData.couponCode || '',
+                discountPercentage: planData.discountPercentage || '',
             });
             setIsEditMode(true);
         } else {
@@ -40,7 +51,10 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
             name: '',
             price: 0,
             description: '',
-            category: 'monthly'
+            category: 'membership',
+            subCategory: 'monthly',
+            couponCode: '',
+            discountPercentage: '',
         });
         setIsEditMode(false);
     };
@@ -49,7 +63,9 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
         const { name, value } = e.target;
         setData(prev => ({
             ...prev,
-            [name]: name === 'price' ? parseFloat(value) || 0 : value
+            [name]: name === 'price' || name === 'discountPercentage' 
+                ? parseFloat(value) || 0 
+                : value
         }));
     };
 
@@ -57,7 +73,7 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
         e.preventDefault();
         setError('');
         setLoading(true);
-        
+
         try {
             if (isEditMode) {
                 await axios.put(`${API_URL}/api/plans/${planData._id}`, data);
@@ -99,6 +115,7 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
                     {error && <p className="text-red-500 mb-4">{error}</p>}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        {/* Plan Name */}
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-gray-800">Plan Name*</label>
                             <input 
@@ -111,6 +128,7 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
                             />
                         </div>
 
+                        {/* Price */}
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-gray-800">Price*</label>
                             <input 
@@ -125,6 +143,7 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
                             />
                         </div>
 
+                        {/* Category */}
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-gray-800">Category*</label>
                             <select 
@@ -142,6 +161,59 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
                             </select>
                         </div>
 
+                        {/* SubCategory - Only show if not "coupon" */}
+                        {data.category !== 'coupon' && (
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm text-gray-800">Sub Category*</label>
+                                <select 
+                                    name="subCategory"
+                                    value={data.subCategory}
+                                    onChange={handleChange}
+                                    className="p-2 border rounded-md w-full"
+                                    required
+                                >
+                                    {subCategories.map((sub) => (
+                                        <option key={sub.value} value={sub.value}>
+                                            {sub.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+                        {/* Coupon Fields - Only show if "coupon" */}
+                        {data.category === 'coupon' && (
+                            <>
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-sm text-gray-800">Coupon Code*</label>
+                                    <input 
+                                        type="text"
+                                        name="couponCode"
+                                        value={data.couponCode}
+                                        onChange={handleChange}
+                                        className="p-2 border rounded-md w-full"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-sm text-gray-800">Discount Percentage*</label>
+                                    <input 
+                                        type="number"
+                                        name="discountPercentage"
+                                        value={data.discountPercentage}
+                                        onChange={handleChange}
+                                        className="p-2 border rounded-md w-full"
+                                        min="0"
+                                        max="100"
+                                        step="0.01"
+                                        required
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        {/* Description */}
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-gray-800">Description*</label>
                             <textarea
@@ -153,6 +225,7 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
                             />
                         </div>
 
+                        {/* Actions */}
                         <div className="flex justify-end space-x-3 pt-4">
                             <button
                                 type="button"
@@ -167,13 +240,7 @@ const PlanModal = ({ isOpen, onClose, planData, onSuccess }) => {
                                 className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
                             >
                                 {loading ? (
-                                    <span className="flex items-center justify-center">
-                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Processing...
-                                    </span>
+                                    <Loading/>
                                 ) : isEditMode ? 'Update Plan' : 'Create Plan'}
                             </button>
                         </div>

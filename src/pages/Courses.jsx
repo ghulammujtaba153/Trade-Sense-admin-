@@ -3,8 +3,12 @@ import { API_URL } from '../config/url';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import CourseModal from '../components/CourseModal';
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiEye, FiPlus, FiTrash2 } from 'react-icons/fi';
 import EnrollmentGraph from '../components/EnrollmentGraph';
+import Loading from '../components/Loading';
+import PageLoader from '../components/PageLoader';
+import CourseModuleModal from '../components/CourseModuleModal';
+import AddCourseModule from '../components/AddCourseModule';
 
 const Courses = () => {
     const [courses, setCourses] = useState([]);
@@ -16,7 +20,10 @@ const Courses = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [activeDropdown, setActiveDropdown] = useState(null);
-  
+    const [viewModuleModal, setViewModuleModal] = useState(false);
+    const [viewAddModuleModal, setViewAddModuleModal] = useState(false);
+    
+
 
     const handleSuccess = () => {
         toast.success('Operation completed successfully');
@@ -43,7 +50,7 @@ const Courses = () => {
         }
     };
 
-    
+
 
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this course?')) return;
@@ -79,24 +86,27 @@ const Courses = () => {
 
     useEffect(() => {
         let result = courses;
-        
+
 
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            result = result.filter(course => 
+            result = result.filter(course =>
                 course.title.toLowerCase().includes(term) ||
                 (course.creator?.name && course.creator.name.toLowerCase().includes(term))
-    )}
-        
+            )
+        }
+
         // Apply status filter
         if (statusFilter !== 'all') {
             result = result.filter(course => course.status === statusFilter);
         }
-        
+
         setFilteredCourses(result);
     }, [searchTerm, statusFilter, courses]);
 
-    if (loading) return <p className='text-center'>Loading...</p>;
+    if (loading) return <div className='flex justify-center items-center h-screen'>
+        <PageLoader />
+    </div>
     if (error) return <p className='text-center text-red-500'>Error loading courses</p>;
 
     return (
@@ -110,7 +120,7 @@ const Courses = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    
+
                     <select
                         className="p-2 border rounded-md"
                         value={statusFilter}
@@ -121,8 +131,8 @@ const Courses = () => {
                         <option value="archived">Archived</option>
                     </select>
                 </div>
-                
-                <button 
+
+                <button
                     onClick={() => {
                         setSelectedCourse(null);
                         setIsModalOpen(true);
@@ -139,6 +149,27 @@ const Courses = () => {
                 courseData={selectedCourse}
                 onSuccess={handleSuccess}
             />
+
+            {viewModuleModal && selectedCourse && (
+                <CourseModuleModal
+                    isOpen={viewModuleModal}
+                    onClose={() => setViewModuleModal(false)}
+                    data={selectedCourse}
+                    onSuccess={handleSuccess}
+                />
+            )}
+
+
+            {viewAddModuleModal && selectedCourse && (
+                <AddCourseModule
+                    isOpen={viewAddModuleModal}
+                    onClose={() => setViewAddModuleModal(false)}
+                    data={selectedCourse}
+                    onSuccess={handleSuccess}
+                />
+            )}
+
+
 
             <div className="overflow-x-auto bg-white rounded-lg shadow">
                 <table className="min-w-full">
@@ -172,6 +203,19 @@ const Courses = () => {
                                     </td>
                                     <td className="px-4 py-3">
                                         <div className="flex items-center gap-2">
+                                            <button onClick={() =>{
+                                                setSelectedCourse(course);
+                                                setViewAddModuleModal(true);
+                                            }}>
+                                                <FiPlus />
+                                            </button>
+
+                                            <button onClick={() => {
+                                                setSelectedCourse(course);
+                                                setViewModuleModal(true);
+                                            }}>
+                                                <FiEye />
+                                            </button>
                                             <button
                                                 onClick={() => {
                                                     setSelectedCourse(course);
@@ -194,7 +238,7 @@ const Courses = () => {
                                                 >
                                                     ⋮
                                                 </button>
-                                                
+
                                                 {activeDropdown === course._id && (
                                                     <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10 border">
                                                         <div className="py-1">
@@ -230,7 +274,7 @@ const Courses = () => {
             </div>
 
             <div className='bg-white shadow-2xl rounded-lg p-6 mt-6'>
-                <EnrollmentGraph/>
+                <EnrollmentGraph />
             </div>
         </div>
     );

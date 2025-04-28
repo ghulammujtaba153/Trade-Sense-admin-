@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config/url';
 import { toast } from 'react-toastify';
+import Loading from './Loading';
 
 const UserModal = ({ isOpen, onClose, userData, onSuccess }) => {
     const [data, setData] = useState({
@@ -189,7 +190,7 @@ const UserModal = ({ isOpen, onClose, userData, onSuccess }) => {
                                 disabled={loading}
                                 className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
                             >
-                                {loading ? 'Processing...' : isEditMode ? 'Update' : 'Create'}
+                                {loading ? <Loading/> : isEditMode ? 'Update' : 'Create'}
                             </button>
                         </div>
                     </form>

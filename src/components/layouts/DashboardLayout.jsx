@@ -1,10 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { FiBell, FiChevronLeft, FiChevronRight, FiHome, FiMail, FiUser } from 'react-icons/fi';
+import { RiAdminFill } from "react-icons/ri";
+import { CiMenuFries } from "react-icons/ci";
 
 const DashboardLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 640); // sm breakpoint (640px)
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
 
@@ -12,17 +14,40 @@ const DashboardLayout = () => {
     { name: 'Dashboard', path: '/', icon: <FiHome /> },
     { name: 'Users', path: '/users', icon: <FiUser /> },
     { name: 'Courses', path: '/courses', icon: <FiMail /> },
-    { name: "Plans", path: "/plans", icon: <FiBell /> },
+    { name: 'Plans', path: '/plans', icon: <FiBell /> },
+    { name: 'Editors', path: '/editors', icon: <RiAdminFill /> }
   ];
 
   const handleLogout = () => {
     logout();
   };
 
+  // This effect listens to window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 640) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden relative">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-[#F1F2F7] text-gray-800 transition-all duration-300 ease-in-out`}>
+      <div className={`
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        sm:translate-x-0
+        fixed sm:static top-0 left-0 h-full bg-[#F1F2F7] text-gray-800 transition-transform duration-300 ease-in-out
+        ${sidebarOpen ? 'w-64' : 'w-64'}
+        sm:${sidebarOpen ? 'w-64' : 'w-20'}
+        z-50
+      `}>
         <div className="p-4 flex items-center justify-between">
           {sidebarOpen && (
             <h1 className="text-xl font-bold">Trade Sense</h1>
@@ -49,9 +74,14 @@ const DashboardLayout = () => {
                         ? 'bg-indigo-600 text-white'
                         : 'hover:bg-gray-300 hover:text-[#5A67BA]'
                     }`}
+                    onClick={() => {
+                      if (window.innerWidth < 640) {
+                        setSidebarOpen(false);
+                      }
+                    }}
                   >
                     <span className="text-xl mr-3">{item.icon}</span>
-                    {sidebarOpen && <span>{item.name}</span>}
+                    {(sidebarOpen || window.innerWidth >= 640) && <span>{item.name}</span>}
                   </Link>
                 </li>
               );
@@ -60,7 +90,7 @@ const DashboardLayout = () => {
         </nav>
 
         {/* User Profile */}
-        {sidebarOpen && user && (
+        {(sidebarOpen || window.innerWidth >= 640) && user && (
           <div className="absolute max-w-[250px] bottom-0 w-full p-4 bg-indigo-800">
             <div className="flex items-center">
               <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center">
@@ -82,24 +112,31 @@ const DashboardLayout = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        <header className="bg-white shadow-sm p-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-800">
-              Dashboard
-            </h2>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 rounded-full hover:bg-gray-100">
-                <FiBell size={20} />
-              </button>
-              <button className="p-2 rounded-full hover:bg-gray-100">
-                <FiMail size={20} />
-              </button>
-            </div>
+      <div className="flex-1 flex flex-col overflow-auto ml-0 sm:ml-0">
+        <header className="bg-white shadow-sm p-4 flex items-center justify-between">
+          {/* Mobile Menu Button */}
+          <button
+            className="sm:hidden p-2 rounded-md hover:bg-gray-100"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            <CiMenuFries size={24} />
+          </button>
+
+          <h2 className="text-xl font-semibold text-gray-800">
+            Dashboard
+          </h2>
+
+          <div className="flex items-center space-x-4">
+            <button className="p-2 rounded-full hover:bg-gray-100">
+              <FiBell size={20} />
+            </button>
+            <button className="p-2 rounded-full hover:bg-gray-100">
+              <FiMail size={20} />
+            </button>
           </div>
         </header>
 
-        <main className="p-6">
+        <main className="p-6 flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>

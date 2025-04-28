@@ -11,6 +11,8 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
+import Loading from '../components/Loading';
+import PageLoader from '../components/PageLoader';
 
 
 const Dashboard = () => {
@@ -72,9 +74,9 @@ const Dashboard = () => {
   },[])
 
 
-  if(loading){
-    return <h1>Loading...</h1>
-  }
+  if (loading) return <div className='flex justify-center items-center h-screen'>
+        <PageLoader/>
+    </div>
 
 
   return (

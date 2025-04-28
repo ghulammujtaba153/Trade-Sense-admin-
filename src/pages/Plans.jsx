@@ -4,18 +4,29 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { API_URL } from '../config/url';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import Loading from '../components/Loading';
+import PageLoader from '../components/PageLoader';
 
+// Correct categories based on your schema
 const categories = [
-    { value: 'monthly', label: 'Monthly Package' },
-    { value: 'yearly', label: 'Yearly Package' },
-    { value: 'lifetime', label: 'Lifetime Package' }
+    { value: 'membership', label: 'Membership' },
+    { value: 'plans', label: 'Plans' },
+    { value: 'coupon', label: 'Coupon' }
+];
+
+// Correct subCategories
+const subCategories = [
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'yearly', label: 'Yearly' }
 ];
 
 const Plans = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [data, setData] = useState([]);
-    const [categoryFilter, setCategoryFilter] = useState(''); // default is show all
+    const [categoryFilter, setCategoryFilter] = useState('');
+    const [subCategoryFilter, setSubCategoryFilter] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const fetchPlans = async () => {
         try {
@@ -24,6 +35,8 @@ const Plans = () => {
         } catch (error) {
             console.error('Error fetching plans:', error);
             toast.error('Failed to load plans');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -43,13 +56,21 @@ const Plans = () => {
         fetchPlans();
     };
 
-    const filteredData = categoryFilter
-        ? data.filter(plan => plan.category === categoryFilter)
-        : data;
+    const filteredData = data.filter(plan => {
+        let matchesCategory = categoryFilter ? plan.category === categoryFilter : true;
+        let matchesSubCategory = subCategoryFilter ? plan.subCategory === subCategoryFilter : true;
+        return matchesCategory && matchesSubCategory;
+    });
 
     useEffect(() => {
         fetchPlans();
     }, []);
+
+    if (loading) return (
+        <div className='flex justify-center items-center h-screen'>
+            <PageLoader />
+        </div>
+    );
 
     return (
         <div className="p-4">
@@ -64,18 +85,39 @@ const Plans = () => {
                     Add New Plan
                 </button>
 
-                <select
-                    value={categoryFilter}
-                    onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="border border-gray-300 rounded px-3 py-2"
-                >
-                    <option value="">All Categories</option>
-                    {categories.map(cat => (
-                        <option key={cat.value} value={cat.value}>
-                            {cat.label}
-                        </option>
-                    ))}
-                </select>
+                <div className="flex gap-3">
+                    <select
+                        value={categoryFilter}
+                        onChange={(e) => {
+                            setCategoryFilter(e.target.value);
+                            setSubCategoryFilter(''); // Reset subCategory when category changes
+                        }}
+                        className="border border-gray-300 rounded px-3 py-2"
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map(cat => (
+                            <option key={cat.value} value={cat.value}>
+                                {cat.label}
+                            </option>
+                        ))}
+                    </select>
+
+                    {/* Show subCategory filter only for membership or plans */}
+                    {(categoryFilter === 'membership' || categoryFilter === 'plans') && (
+                        <select
+                            value={subCategoryFilter}
+                            onChange={(e) => setSubCategoryFilter(e.target.value)}
+                            className="border border-gray-300 rounded px-3 py-2"
+                        >
+                            <option value="">All SubCategories</option>
+                            {subCategories.map(sub => (
+                                <option key={sub.value} value={sub.value}>
+                                    {sub.label}
+                                </option>
+                            ))}
+                        </select>
+                    )}
+                </div>
             </div>
 
             <PlanModal
@@ -92,6 +134,9 @@ const Plans = () => {
                             <th className="px-4 py-2">Title</th>
                             <th className="px-4 py-2">Price</th>
                             <th className="px-4 py-2">Category</th>
+                            <th className="px-4 py-2">SubCategory</th>
+                            <th className="px-4 py-2">Coupon Code</th>
+                            <th className="px-4 py-2">Discount %</th>
                             <th className="px-4 py-2">Description</th>
                             <th className="px-4 py-2">Actions</th>
                         </tr>
@@ -101,7 +146,10 @@ const Plans = () => {
                             <tr key={plan._id} className="border-t">
                                 <td className="px-4 py-2">{plan.name}</td>
                                 <td className="px-4 py-2">{plan.price}</td>
-                                <td className="px-4 py-2">{plan.category}</td>
+                                <td className="px-4 py-2 capitalize">{plan.category}</td>
+                                <td className="px-4 py-2 capitalize">{plan.subCategory || '-'}</td>
+                                <td className="px-4 py-2">{plan.couponCode || '-'}</td>
+                                <td className="px-4 py-2">{plan.discountPercentage != null ? `${plan.discountPercentage}%` : '-'}</td>
                                 <td className="px-4 py-2">{plan.description}</td>
                                 <td className="px-4 py-2 space-x-2">
                                     <button
@@ -124,7 +172,7 @@ const Plans = () => {
                         ))}
                         {filteredData.length === 0 && (
                             <tr>
-                                <td colSpan="5" className="text-center py-4 text-gray-500">
+                                <td colSpan="8" className="text-center py-4 text-gray-500">
                                     No plans found.
                                 </td>
                             </tr>

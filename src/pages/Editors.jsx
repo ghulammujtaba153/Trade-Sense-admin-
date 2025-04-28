@@ -10,7 +10,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import PageLoader from '../components/PageLoader';
 
 
-const Users = () => {
+const Editors = () => {
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,7 +25,7 @@ const Users = () => {
 
     const fetchUsers = async () => {
         try {
-            const res = await axios.get(`${API_URL}/api/auth/users`);
+            const res = await axios.get(`${API_URL}/api/auth/editors`);
             setUsers(res.data.users);
             setFilteredUsers(res.data.users);
         } catch (error) {
@@ -175,7 +175,7 @@ const Users = () => {
                         to="/register"
                         className="bg-indigo-600 flex items-center gap-2 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors w-full md:w-auto text-center"
                     >
-                        <IoMdPersonAdd />
+                        <IoMdPersonAdd/>
                         Add New User
                     </Link>
                     {/* <button onClick={openAddModal} className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors w-full md:w-auto text-center" >
@@ -184,17 +184,17 @@ const Users = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* <select
+                    <select
                         className="border border-gray-300 p-2 rounded-md"
                         value={roleFilter}
                         onChange={(e) => setRoleFilter(e.target.value)}
                     >
                         <option value="all">All Roles</option>
                         <option value="admin">Admin</option>
-                        <option value="user">User</option>
-                    </select> */}
+                        <option value="editor">Editor</option>
+                    </select>
 
-                    <select
+                    {/* <select
                         className="border border-gray-300 p-2 rounded-md"
                         value={expFilter}
                         onChange={(e) => setExpFilter(e.target.value)}
@@ -203,7 +203,7 @@ const Users = () => {
                         <option value="beginner">Beginner</option>
                         <option value="intermediate">Intermediate</option>
                         <option value="advanced">Advanced</option>
-                    </select>
+                    </select> */}
 
                     <select
                         className="border border-gray-300 p-2 rounded-md"
@@ -223,8 +223,8 @@ const Users = () => {
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th> */}
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th> */}
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -239,15 +239,15 @@ const Users = () => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm text-gray-500">{user.email}</div>
                                     </td>
-                                    {/* <td className="px-6 py-4 whitespace-nowrap">
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                             ${user.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
                                             {user.role}
                                         </span>
-                                    </td> */}
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
-                                        {user.experienceLevel}
                                     </td>
+                                    {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
+                                        {user.experienceLevel}
+                                    </td> */}
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                             ${user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
@@ -315,4 +315,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Editors;
