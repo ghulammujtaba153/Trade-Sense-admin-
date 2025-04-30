@@ -68,7 +68,10 @@ const CourseModuleModal = ({ isOpen, onClose, data, onSuccess }) => {
                             <div>
                                 <h3 className="font-semibold text-lg">{module.title}</h3>
                                 <p className="text-gray-600">{module.content}</p>
-                                <p className="text-blue-600">{module.videoUrl}</p>
+                                <audio controls className="w-full mt-2">
+                                    <source src={module.videoUrl} type="audio/mpeg" />
+                                    Your browser does not support the audio element.
+                                </audio>
                             </div>
                             <button
                                 onClick={() => handleDeleteModule(index)}

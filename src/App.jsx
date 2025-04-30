@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Courses from './pages/Courses';
 import Plans from './pages/Plans';
 import Editors from './pages/Editors';
+import MindFulResources from './pages/MindFulResources';
+import InstructorManagement from './pages/InstructorManagement';
 
 function App() {
   return (
@@ -24,9 +26,13 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/register" element={<Register />} />
               <Route path="/users" element={<Users />} />
-              <Route path="/courses" element={<Courses/>} />
+              <Route path="/courses" >
+                <Route index element={<Courses />} />
+                <Route path="instructors" element={<InstructorManagement/>} />
+              </Route>
               <Route path='/plans' element={<Plans/>} />
               <Route path='/editors' element={<Editors/>} />
+              <Route path="/resources" element={<MindFulResources />}/>
             </Route>
           </Route>
           
