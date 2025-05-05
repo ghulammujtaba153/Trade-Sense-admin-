@@ -15,7 +15,8 @@ const AssignInstructor = ({ isOpen, onClose, instructors, onAssign }) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setCourses(res.data);
+      const filtered = res.data.filter((course) => !course.instructor[0]);
+      setCourses(filtered);
     } catch (error) {
       console.log(error);
     }
@@ -36,6 +37,24 @@ const AssignInstructor = ({ isOpen, onClose, instructors, onAssign }) => {
     value: course,
     label: course.title,
   }));
+
+  const handleAssign = async (selectedInstructor, selectedCourse) => {
+    try {
+      const res = await axios.patch(
+        `${API_URL}/api/courses/instructor/${selectedCourse._id}`,
+        { instructorId: selectedInstructor._id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      onAssign(res.data);
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -72,7 +91,7 @@ const AssignInstructor = ({ isOpen, onClose, instructors, onAssign }) => {
           <button
             onClick={() =>
               selectedInstructor && selectedCourse &&
-              onAssign(selectedInstructor, selectedCourse)
+              handleAssign(selectedInstructor, selectedCourse)
             }
             disabled={!selectedInstructor || !selectedCourse}
             className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded disabled:opacity-50"

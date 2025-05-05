@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, TextField } from '@mui/material';
 import { API_URL } from '../config/url';
-import AddResource from '../components/minfulResources/AddResource';
-import ViewResourceModal from "../components/minfulResources/ViewResource"
+import AddResource from '../components/mindfulResources/AddResource';
+import ViewResourceModal from "../components/mindfulResources/ViewResource"
 import { toast } from 'react-toastify';
 import { FaEye, FaPen, FaRegTrashAlt } from "react-icons/fa";
 
@@ -26,6 +26,7 @@ const MindFulResources = () => {
       console.error('Error fetching resources', error);
     }
   };
+
 
   useEffect(() => {
     fetchResources();
@@ -115,13 +116,11 @@ const MindFulResources = () => {
           onChange={(e) => handleFilterChange('category', e.target.value)}
           size="small"
         >
-          <MenuItem value="">All Categories</MenuItem>
-          <MenuItem value="meditation">Meditation</MenuItem>
-          <MenuItem value="motivation">Motivation</MenuItem>
-          <MenuItem value="affirmation">Affirmation</MenuItem>
-          <MenuItem value="breathing">Breathing</MenuItem>
+          <MenuItem value="">All Pillars</MenuItem>
           <MenuItem value="focus">Focus</MenuItem>
-          <MenuItem value="stress-relief">Stress Relief</MenuItem>
+          <MenuItem value="stress relief">Stress Relief</MenuItem>
+          <MenuItem value="emotional resilience">Emotional Resilience</MenuItem>
+          <MenuItem value="performance optimization">Performance Optimization</MenuItem>
         </Select>
       </div>
 
@@ -133,9 +132,9 @@ const MindFulResources = () => {
   <TableRow className="bg-gray-100">
     <TableCell>Title</TableCell>
     <TableCell>Type</TableCell>
+    <TableCell>Pillar</TableCell>
     <TableCell>Category</TableCell>
     <TableCell>Tags</TableCell>
-    <TableCell>Duration (s)</TableCell>
     <TableCell>Premium</TableCell>
     <TableCell align="center">Actions</TableCell> {/* 👈 New column */}
   </TableRow>
@@ -145,9 +144,9 @@ const MindFulResources = () => {
     <TableRow key={res._id}>
       <TableCell>{res.title}</TableCell>
       <TableCell>{res.type}</TableCell>
+      <TableCell>{res.pillar}</TableCell>
       <TableCell>{res.category}</TableCell>
       <TableCell>{res.tags.join(', ')}</TableCell>
-      <TableCell>{res.duration}</TableCell>
       <TableCell>{res.isPremium ? 'Yes' : 'No'}</TableCell>
       <TableCell align="center">
         {/* 👇 Action Buttons */}

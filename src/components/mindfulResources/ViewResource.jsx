@@ -16,9 +16,10 @@ const ViewResourceModal = ({ open, onClose, resource }) => {
       </DialogTitle>
       <DialogContent className="space-y-4">
         <p><strong>Type:</strong> {resource.type}</p>
+        <p><strong>Pillar:</strong> {resource.pillar}</p>
         <p><strong>Category:</strong> {resource.category}</p>
         <p><strong>Tags:</strong> {resource.tags.join(', ')}</p>
-        <p><strong>Duration:</strong> {resource.duration} seconds</p>
+        
         <p><strong>Premium:</strong> {resource.isPremium ? 'Yes' : 'No'}</p>
 
         {resource.type === 'audio' ? (

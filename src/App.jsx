@@ -13,6 +13,11 @@ import Plans from './pages/Plans';
 import Editors from './pages/Editors';
 import MindFulResources from './pages/MindFulResources';
 import InstructorManagement from './pages/InstructorManagement';
+import Admins from './pages/Admins';
+import OnboardingQuestionnaire from './pages/OnboardingQuestionnaire';
+import PillarsCategories from './pages/PillarsCategories';
+import AccountabilityManagement from './pages/AccountabilityManagement';
+import Notification from './pages/Notification';
 
 function App() {
   return (
@@ -26,6 +31,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/register" element={<Register />} />
               <Route path="/users" element={<Users />} />
+              <Route path="/admins" element={<Admins />} />
               <Route path="/courses" >
                 <Route index element={<Courses />} />
                 <Route path="instructors" element={<InstructorManagement/>} />
@@ -33,6 +39,11 @@ function App() {
               <Route path='/plans' element={<Plans/>} />
               <Route path='/editors' element={<Editors/>} />
               <Route path="/resources" element={<MindFulResources />}/>
+              <Route path='/pillars/categories' element={<PillarsCategories/>} />
+              <Route path='/accountability' element={<AccountabilityManagement/>} />
+
+              <Route path='/onboarding' element={<OnboardingQuestionnaire/>} />
+              <Route path="/notifications" element={<Notification/>}/>
             </Route>
           </Route>
           
@@ -41,7 +52,7 @@ function App() {
         </Routes>
       </Router>
       
-      {/* Toast Container - should be outside Router but inside the fragment */}
+     
       <ToastContainer
         position="top-right"
         autoClose={5000}

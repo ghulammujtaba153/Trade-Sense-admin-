@@ -39,6 +39,7 @@ const Courses = () => {
                     }
                 }
             );
+            console.log("fetch data from db",res.data);
             setCourses(res.data);
             setFilteredCourses(res.data);
         } catch (error) {
@@ -177,7 +178,7 @@ const Courses = () => {
                         <tr>
                             <th className="px-4 py-3 text-left">Creator</th>
                             <th className="px-4 py-3 text-left">Title</th>
-                            <th className="px-4 py-3 text-left">Duration</th>
+                            <th className="px-4 py-3 text-left">Instructor</th>
                             <th className="px-4 py-3 text-left">Status</th>
                             <th className="px-4 py-3 text-left">Actions</th>
                         </tr>
@@ -194,7 +195,7 @@ const Courses = () => {
                                         <div className="font-medium">{course.title}</div>
                                         {/* <div className="text-sm text-gray-500 line-clamp-2">{course.description}</div> */}
                                     </td>
-                                    <td className="px-4 py-3">{course.duration}</td>
+                                    <td className="px-4 py-3">{course.instructor[0] ? course.instructor[0].email : 'N/A'}</td>
                                     <td className="px-4 py-3">
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium 
                                             ${course.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>

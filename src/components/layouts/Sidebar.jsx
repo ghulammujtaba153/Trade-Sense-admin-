@@ -29,7 +29,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       name: "Users",
       path: "/users",
       icon: <FiUser />,
-      subItems: [{ name: "Subscription Status", path: "#" }],
+      subItems: [
+        { name: "Instructors", path: "/editors" },
+        { name: "Admins", path: "/admins" },
+      ],
     },
     {
       name: "Courses & Instructors",
@@ -37,56 +40,63 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       icon: <FiMail />,
       subItems: [
         { name: "Instructor Management", path: "/courses/instructors" },
-        { name: "Affiliate Program Settings", path: "/courses" },
+        // { name: "Affiliate Program Settings", path: "/courses" },
       ],
     },
     { name: "Plans", path: "/plans", icon: <FiBell /> },
-    { name: "Editors", path: "/editors", icon: <RiAdminFill /> },
-    {
-      name: "Journals",
-      path: "#",
-      icon: <RiAdminFill />,
-      subItems: [
-        { name: "View Journals", path: "#" },
-        { name: "Analyze User Entries", path: "#" },
-      ],
-    },
-    {
-      name: "Accountability Management",
-      path: "#",
-      icon: <RiAdminFill />,
-      subItems: [{ name: "User Goals & Habits", path: "#" }],
-    },
+    // { name: "Editors", path: "/editors", icon: <RiAdminFill /> },
     {
       name: "Mindfulness Content",
       path: "/resources",
       icon: <RiAdminFill />,
       subItems: [
-        { name: "Pillars & Categories", path: "#" },
+        { name: "Pillars & Categories", path: "/pillars/categories" },
         { name: "Manage Content", path: "#" },
         { name: "Tag Management", path: "#" },
       ],
     },
     {
+      name: "Onboarding Questionnaire",
+      path: "/onboarding",
+      icon: <RiAdminFill />,
+      // subItems: [{ name: "User Analytics", path: "#" }],
+    },
+    // {
+    //   name: "Journals",
+    //   path: "#",
+    //   icon: <RiAdminFill />,
+    //   subItems: [
+    //     { name: "View Journals", path: "#" },
+    //     { name: "Analyze User Entries", path: "#" },
+    //   ],
+    // },
+    {
+      name: "Accountability Management",
+      path: "/accountability",
+      icon: <RiAdminFill />,
+      subItems: [{ name: "User Goals & Habits", path: "#" }],
+    },
+    
+    {
       name: "Push Notifications",
-      path: "#",
+      path: "/notifications",
       icon: <RiAdminFill />,
       subItems: [
         { name: "Create Notification", path: "#" },
         { name: "Notification History", path: "#" },
       ],
     },
-    {
-      name: "Settings",
-      path: "#",
-      icon: <RiAdminFill />,
-      subItems: [
-        { name: "App Configuration", path: "#" },
-        { name: "Onboarding Questionnaires", path: "#" },
-        { name: "Personalization Rules", path: "#" },
-      ],
-    },
-    { name: "Logs & Activity History", path: "#", icon: <RiAdminFill /> },
+    // {
+    //   name: "Settings",
+    //   path: "#",
+    //   icon: <RiAdminFill />,
+    //   subItems: [
+    //     { name: "App Configuration", path: "#" },
+    //     { name: "Onboarding Questionnaires", path: "#" },
+    //     { name: "Personalization Rules", path: "#" },
+    //   ],
+    // },
+    // { name: "Logs & Activity History", path: "#", icon: <RiAdminFill /> },
   ];
 
   // Expand the menu if current path matches a subItem

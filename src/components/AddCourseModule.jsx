@@ -5,6 +5,7 @@ import { API_URL } from '../config/url';
 import { AuthContext } from '../context/AuthContext';
 import { uploadMedia } from '../utils/upload';
 import Loading from './Loading';
+import Select from 'react-select';
 
 const AddCourseModule = ({ isOpen, onClose, data, onSuccess }) => {
   const { user } = useContext(AuthContext);
@@ -17,6 +18,9 @@ const AddCourseModule = ({ isOpen, onClose, data, onSuccess }) => {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
+
+  
+  
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;

@@ -1,31 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../config/url';
 import { uploadMedia } from '../../utils/upload';
 import Loading from '../Loading';
 
-const AddResource = ({ onClose, onSuccess, resource =null }) => {
-  const initialState = resource ? {
-    title: resource.title || '',
-    type: resource.type || 'audio',
-    category: resource.category || 'meditation',
-    tags: resource.tags || [],
-    duration: resource.duration?.toString() || '',
-    isPremium: resource.isPremium || false,
-    url: resource.url || '',
-  } : {
-    title: '',
-    type: 'audio',
-    category: 'meditation',
-    tags: [],
-    duration: '',
-    isPremium: false,
-    url: '',
-  };
-  console.log("prop", resource)
-  
-  const [formData, setFormData] = useState(initialState);
-  
+const AddResource = ({ onClose, onSuccess, resource = null }) => {
+  const [pillars, setPillars] = useState([]);
+  const [formData, setFormData] = useState({
+    title: resource?.title || '',
+    type: resource?.type || 'audio',
+    category: resource?.category || '',
+    tags: resource?.tags || [],
+    pillar: resource?.pillar || '',
+    isPremium: resource?.isPremium || false,
+    url: resource?.url || '',
+  });
+
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -34,6 +24,24 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
     'relaxation', 'confidence', 'mindfulness', 'energy boost',
     'focus', 'calm', 'anxiety relief', 'daily ritual', 'positivity'
   ];
+
+  const fetchPillars = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/pillars/categories`);
+      setPillars(res.data);
+    } catch (error) {
+      console.error("Failed to fetch pillars:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPillars();
+  }, []);
+
+  const getCategoriesForPillar = (pillarName) => {
+    const pillar = pillars.find(p => p.name === pillarName);
+    return pillar ? pillar.categories : [];
+  };
 
   const toggleTag = (tag) => {
     setFormData(prev => ({
@@ -48,14 +56,13 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
+      ...(name === 'pillar' && { category: '' }) // reset category on pillar change
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (!file) return alert('Please select an audio/video file');
 
     try {
       setUploading(true);
@@ -68,7 +75,6 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
       const resourceData = {
         ...formData,
         url: uploadedUrl,
-        duration: Number(formData.duration)
       };
 
       if (resource) {
@@ -76,6 +82,7 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
       } else {
         await axios.post(`${API_URL}/api/resources`, resourceData);
       }
+
       setUploading(false);
       onSuccess();
       onClose();
@@ -88,16 +95,17 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl p-6 w-full max-w-md">
-      <h2 className="text-xl font-bold mb-4">
-        {resource ? 'Edit Mindful Resource' : 'Add Mindful Resource'}
-      </h2>
+        <h2 className="text-xl font-bold mb-4">
+          {resource ? 'Edit Mindful Resource' : 'Add Mindful Resource'}
+        </h2>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 font-medium">Title</label>
             <input
               name="title"
-              placeholder="Enter title"
               required
+              placeholder="Enter title"
               className="w-full p-2 border rounded"
               value={formData.title}
               onChange={handleChange}
@@ -106,21 +114,35 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
 
           <div>
             <label className="block mb-1 font-medium">Type</label>
-            <select name="type" className="w-full p-2 border rounded" onChange={handleChange} value={formData.type}>
+            <select name="type" className="w-full p-2 border rounded" value={formData.type} onChange={handleChange}>
               <option value="audio">Audio</option>
               <option value="video">Video</option>
             </select>
           </div>
 
           <div>
+            <label className="block mb-1 font-medium">Pillar</label>
+            <select name="pillar" className="w-full p-2 border rounded" value={formData.pillar} onChange={handleChange}>
+              <option value="">Select Pillar</option>
+              {pillars.map(p => (
+                <option key={p._id} value={p.name}>{p.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
             <label className="block mb-1 font-medium">Category</label>
-            <select name="category" className="w-full p-2 border rounded" onChange={handleChange} value={formData.category}>
-              <option value="meditation">Meditation</option>
-              <option value="motivation">Motivation</option>
-              <option value="affirmation">Affirmation</option>
-              <option value="breathing">Breathing</option>
-              <option value="focus">Focus</option>
-              <option value="stress-relief">Stress Relief</option>
+            <select
+              name="category"
+              className="w-full p-2 border rounded"
+              value={formData.category}
+              onChange={handleChange}
+              disabled={!formData.pillar}
+            >
+              <option value="">Select Category</option>
+              {getCategoriesForPillar(formData.pillar).map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
             </select>
           </div>
 
@@ -144,19 +166,6 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
             </div>
           </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Duration (seconds)</label>
-            <input
-              name="duration"
-              type="number"
-              placeholder="Duration in seconds"
-              required
-              className="w-full p-2 border rounded"
-              value={formData.duration}
-              onChange={handleChange}
-            />
-          </div>
-
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -167,14 +176,12 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
             Premium Content
           </label>
 
-          
-
           <div>
             <label className="block mb-1 font-medium">Upload File</label>
             <input
               type="file"
               accept={formData.type === 'audio' ? 'audio/*' : 'video/*'}
-              required={!resource} // Only required if adding
+              required={!resource}
               onChange={(e) => setFile(e.target.files[0])}
               className="w-full"
             />
@@ -185,7 +192,7 @@ const AddResource = ({ onClose, onSuccess, resource =null }) => {
               <div
                 className="bg-blue-500 h-2 rounded"
                 style={{ width: `${uploadProgress}%` }}
-              ></div>
+              />
               <p className="text-xs mt-1 text-right">{uploadProgress}%</p>
             </div>
           )}
