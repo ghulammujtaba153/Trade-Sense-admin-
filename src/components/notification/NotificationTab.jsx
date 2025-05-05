@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, Box, Typography, TextField, Button } from '@mui/material';
 import NotificationHistory from './NotificationHistory';
-import NotificationAnalytics from './notificationAnalytics';
-import CreateNotification from './createNotification';
+import NotificationAnalytics from './NotificationAnalytics';
+import CreateNotification from './CreateNotification';
+import { API_URL } from '../../config/url';
 
 const Notification = () => {
   const [value, setValue] = useState(0);
@@ -17,7 +18,7 @@ const Notification = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch('/api/notifications');
+        const response = await fetch(`${API_URL}/api/notifications/all`);
         const data = await response.json();
         setNotifications(data.notifications);
       } catch (error) {
@@ -30,7 +31,7 @@ const Notification = () => {
   // Fetch notification history
   const fetchHistory = async () => {
     try {
-      const response = await fetch('/api/notification-history');
+      const response = await fetch(`${API_URL}/api/notifications/history`);
       const data = await response.json();
       setHistory(data.history);
     } catch (error) {
@@ -41,7 +42,7 @@ const Notification = () => {
   // Fetch notification analytics
   const fetchAnalytics = async () => {
     try {
-      const response = await fetch('/api/notification-analytics');
+      const response = await fetch('/api/notification/analytics');
       const data = await response.json();
       setAnalytics(data.analytics);
     } catch (error) {
