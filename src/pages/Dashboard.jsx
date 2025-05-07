@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import Loading from '../components/Loading';
 import PageLoader from '../components/PageLoader';
+import GoalAnalysisGraph from '../components/graphs/GoalAnalysisGraph';
 
 
 const Dashboard = () => {
@@ -169,6 +170,11 @@ const Dashboard = () => {
           </div>
         
 
+      </div>
+
+
+      <div className='bg-white p-6 rounded-lg shadow w-full mt-4'>
+        <GoalAnalysisGraph/>
       </div>
 
 

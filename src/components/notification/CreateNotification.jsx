@@ -19,7 +19,6 @@ const mockRoles = [
   { id: "admin", name: "Administrator" },
   { id: "user", name: "Regular User" },
   { id: "editor", name: "Content Editor" },
-  { id: "viewer", name: "Viewer" },
 ]
 
 export default function CreateNotification() {
@@ -39,6 +38,7 @@ export default function CreateNotification() {
     try {
         const res = await axios.get(`${API_URL}/api/auth/users`);
         setUsers(res.data.users);
+        console.log(res.data.users);
     } catch (error) {
         console.log(error);
     }
@@ -82,7 +82,7 @@ export default function CreateNotification() {
     try {
       const notificationData = {
         ...formData,
-        recipients: formData.targetType === "specific" ? selectedUsers.map((user) => user.id) : [],
+        recipients: formData.targetType === "specific" ? selectedUsers.map((user) => user._id) : [],
         targetRoles: formData.targetType === "roles" ? selectedRoles : [],
         status: formData.sendType === "now" ? "sent" : "scheduled",
       }
@@ -118,7 +118,7 @@ export default function CreateNotification() {
 
   const handleSelectUser = (user) => {
     setSelectedUsers((prev) =>
-      prev.some((u) => u.id === user.id) ? prev.filter((u) => u.id !== user.id) : [...prev, user]
+      prev.some((u) => u.id === user.id) ? prev.filter((u) => u._id !== user._id) : [...prev, user]
     )
   }
 
@@ -129,7 +129,7 @@ export default function CreateNotification() {
   }
 
   const removeSelectedUser = (userId) => {
-    setSelectedUsers((prev) => prev.filter((user) => user.id !== userId))
+    setSelectedUsers((prev) => prev.filter((user) => user._id !== userId))
   }
 
   const removeSelectedRole = (roleId) => {
@@ -227,7 +227,7 @@ export default function CreateNotification() {
             <div className="mt-4 max-h-60 overflow-y-auto border rounded-md p-2">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <div key={user.id} className="flex justify-between items-center py-2 px-2 hover:bg-gray-50 rounded">
+                  <div key={user._id} className="flex justify-between items-center py-2 px-2 hover:bg-gray-50 rounded">
                     <div>
                       <p className="font-medium">{user.name}</p>
                       <p className="text-sm text-gray-500">{user.email}</p>
@@ -236,12 +236,12 @@ export default function CreateNotification() {
                       type="button"
                       onClick={() => handleSelectUser(user)}
                       className={`px-3 py-1 rounded-md ${
-                        selectedUsers.some(u => u.id === user.id) 
+                        selectedUsers.some(u => u._id === user._id) 
                           ? 'bg-red-100 text-red-600' 
                           : 'bg-blue-100 text-blue-600'
                       }`}
                     >
-                      {selectedUsers.some(u => u.id === user.id) ? "Remove" : "Add"}
+                      {selectedUsers.some(u => u._id === user._id) ? "Remove" : "Add"}
                     </button>
                   </div>
                 ))

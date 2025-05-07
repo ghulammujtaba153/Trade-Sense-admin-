@@ -93,7 +93,7 @@ const Notification = () => {
       <Tabs value={value} onChange={handleChange} aria-label="notification tabs">
         <Tab label="Create Notification" />
         <Tab label="Notification History" />
-        <Tab label="Notification Analytics" />
+        {/* <Tab label="Notification Analytics" /> */}
       </Tabs>
 
       {/* Tab Contents */}

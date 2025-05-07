@@ -81,10 +81,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       name: "Push Notifications",
       path: "/notifications",
       icon: <RiAdminFill />,
-      subItems: [
-        { name: "Create Notification", path: "#" },
-        { name: "Notification History", path: "#" },
-      ],
+      
     },
     // {
     //   name: "Settings",

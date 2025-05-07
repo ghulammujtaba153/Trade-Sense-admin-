@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../config/url'
-import { Check, Clock, AlertCircle, User, Mail, Calendar, Eye } from 'lucide-react'
+import { Check, Clock, AlertCircle, User, Mail, Calendar, Eye, Trash } from 'lucide-react'
 import { toast } from 'react-toastify'
 import PageLoader from '../PageLoader'
 
@@ -16,21 +16,23 @@ const NotificationHistory = () => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [dateFilter, setDateFilter] = useState('')
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/notifications/history`)
-        setNotifications(response.data)
-      } catch (error) {
-        console.error('Failed to fetch notifications:', error)
-        toast.error('Failed to load notification history')
-      } finally {
-        setLoading(false)
-      }
-    }
 
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/notifications/history`)
+      setNotifications(response.data.notifications)
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error)
+      toast.error('Failed to load notification history')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
     fetchNotifications()
   }, [])
+  
 
   const filteredNotifications = notifications.filter(notification => {
     const matchesSearch = notification.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -60,6 +62,17 @@ const NotificationHistory = () => {
   const handleViewDetails = (notification) => {
     setSelectedNotification(notification)
     setIsDetailModalOpen(true)
+  }
+
+
+  const handleDeleteNotification =async (id) => {
+    try {
+      const res = await axios.delete(`${API_URL}/api/notifications/${id}`)
+      toast.success(res.data.message)
+      fetchNotifications()
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
   }
 
   if (loading) {
@@ -133,14 +146,21 @@ const NotificationHistory = () => {
                       <span>{notification.recipients?.length || 0}</span>
                     </div>
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-4 flex items-center gap-2">
                     <button
                       onClick={() => handleViewDetails(notification)}
                       className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
                     >
                       <Eye className="h-4 w-4" />
-                      Details
                     </button>
+
+                    <button
+                      onClick={() => handleDeleteNotification(notification._id)}
+                      className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                    >
+                      <Trash className="h-4 w-4" />
+                    </button>
+
                   </td>
                 </tr>
               ))
@@ -204,7 +224,7 @@ const NotificationHistory = () => {
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Target Roles</h3>
                     <p className="mt-1">
-                      {selectedNotification.targetRoles?.join(', ') || 'All users'}
+                      {selectedNotification.targetRoles?.join(', ') || selectedNotification.targetType	}
                     </p>
                   </div>
                 </div>
