@@ -18,6 +18,8 @@ import OnboardingQuestionnaire from './pages/OnboardingQuestionnaire';
 import PillarsCategories from './pages/PillarsCategories';
 import AccountabilityManagement from './pages/AccountabilityManagement';
 import Notification from './pages/Notification';
+import TagsManagement from './pages/TagsManagement';
+import ContentManagement from './pages/ContentManagement';
 
 function App() {
   return (
@@ -38,8 +40,12 @@ function App() {
               </Route>
               <Route path='/plans' element={<Plans/>} />
               <Route path='/editors' element={<Editors/>} />
+
               <Route path="/resources" element={<MindFulResources />}/>
               <Route path='/pillars/categories' element={<PillarsCategories/>} />
+              <Route path='/tags' element={<TagsManagement/>} />
+              <Route path='/content' element={<ContentManagement/>} />
+
               <Route path='/accountability' element={<AccountabilityManagement/>} />
 
               <Route path='/onboarding' element={<OnboardingQuestionnaire/>} />

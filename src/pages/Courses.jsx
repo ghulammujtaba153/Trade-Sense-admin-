@@ -176,7 +176,7 @@ const Courses = () => {
                 <table className="min-w-full">
                     <thead className="bg-gray-100">
                         <tr>
-                            <th className="px-4 py-3 text-left">Creator</th>
+                            {/* <th className="px-4 py-3 text-left">Creator</th> */}
                             <th className="px-4 py-3 text-left">Title</th>
                             <th className="px-4 py-3 text-left">Instructor</th>
                             <th className="px-4 py-3 text-left">Status</th>
@@ -187,15 +187,15 @@ const Courses = () => {
                         {filteredCourses.length > 0 ? (
                             filteredCourses.map((course) => (
                                 <tr key={course._id} className="border-t hover:bg-gray-50">
-                                    <td className="px-4 py-3">
+                                    {/* <td className="px-4 py-3">
                                         <div className="font-medium">{course.creator?.name}</div>
                                         <div className="text-sm text-gray-500">{course.creator?.email}</div>
-                                    </td>
+                                    </td> */}
                                     <td className="px-4 py-3">
                                         <div className="font-medium">{course.title}</div>
                                         {/* <div className="text-sm text-gray-500 line-clamp-2">{course.description}</div> */}
                                     </td>
-                                    <td className="px-4 py-3">{course.instructor[0] ? course.instructor[0].email : 'N/A'}</td>
+                                    <td className="px-4 py-3">{course.instructor ? course.instructor.email : 'N/A'}</td>
                                     <td className="px-4 py-3">
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium 
                                             ${course.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>

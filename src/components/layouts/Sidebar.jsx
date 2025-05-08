@@ -51,8 +51,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       icon: <RiAdminFill />,
       subItems: [
         { name: "Pillars & Categories", path: "/pillars/categories" },
-        { name: "Manage Content", path: "#" },
-        { name: "Tag Management", path: "#" },
+        { name: "Manage Content", path: "/content" },
+        { name: "Tag Management", path: "/tags" },
       ],
     },
     {

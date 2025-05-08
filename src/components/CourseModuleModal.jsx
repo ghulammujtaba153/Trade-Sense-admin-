@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { API_URL } from '../config/url';
 import { AuthContext } from '../context/AuthContext';
+import AudioPlayer from './player/AudioPlayer';
 
 const CourseModuleModal = ({ isOpen, onClose, data, onSuccess }) => {
     const { user } = useContext(AuthContext);
@@ -61,17 +62,18 @@ const CourseModuleModal = ({ isOpen, onClose, data, onSuccess }) => {
                 }
 
                 
-                {/* List all modules */}
+                
                 <div className="space-y-4">
                     {modules.map((module, index) => (
-                        <div key={module._id || index} className="border p-4 rounded-md flex justify-between items-center">
-                            <div>
+                        <div key={module._id || index} className="border p-4 rounded-md flex justify-between items-center gap-4">
+                            <div className='flex-1'>
                                 <h3 className="font-semibold text-lg">{module.title}</h3>
                                 <p className="text-gray-600">{module.content}</p>
-                                <audio controls className="w-full mt-2">
+                                {/* <audio controls className="w-full mt-2">
                                     <source src={module.videoUrl} type="audio/mpeg" />
                                     Your browser does not support the audio element.
-                                </audio>
+                                </audio> */}
+                                <AudioPlayer audio={module.videoUrl} />
                             </div>
                             <button
                                 onClick={() => handleDeleteModule(index)}
@@ -83,7 +85,7 @@ const CourseModuleModal = ({ isOpen, onClose, data, onSuccess }) => {
                     ))}
                 </div>
 
-                {/* Update button */}
+                
                 <div className="flex justify-end mt-6 space-x-2">
                     <button
                         onClick={onClose}

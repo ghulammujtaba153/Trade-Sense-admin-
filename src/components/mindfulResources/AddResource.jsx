@@ -15,15 +15,13 @@ const AddResource = ({ onClose, onSuccess, resource = null }) => {
     isPremium: resource?.isPremium || false,
     url: resource?.url || '',
   });
+  const [tags, setTags] = useState([]);
 
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const tagOptions = [
-    'relaxation', 'confidence', 'mindfulness', 'energy boost',
-    'focus', 'calm', 'anxiety relief', 'daily ritual', 'positivity'
-  ];
+
 
   const fetchPillars = async () => {
     try {
@@ -34,8 +32,19 @@ const AddResource = ({ onClose, onSuccess, resource = null }) => {
     }
   };
 
+
+  const fetchTags = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/tags`);
+      setTags(res.data);
+    } catch (error) {
+      console.error("Failed to fetch tags:", error);
+    }
+  };
+
   useEffect(() => {
     fetchPillars();
+    fetchTags();
   }, []);
 
   const getCategoriesForPillar = (pillarName) => {
@@ -149,18 +158,18 @@ const AddResource = ({ onClose, onSuccess, resource = null }) => {
           <div>
             <label className="block mb-1 font-medium">Tags</label>
             <div className="flex flex-wrap gap-2">
-              {tagOptions.map(tag => (
+              {tags.map(tag => (
                 <button
                   type="button"
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
+                  key={tag._id}
+                  onClick={() => toggleTag(tag.name)}
                   className={`px-3 py-1 rounded-full border ${
-                    formData.tags.includes(tag)
+                    formData.tags.includes(tag.name)
                       ? 'bg-blue-600 text-white border-blue-600'
                       : 'bg-white text-gray-700 border-gray-300'
                   }`}
                 >
-                  {tag}
+                  {tag.name}
                 </button>
               ))}
             </div>
