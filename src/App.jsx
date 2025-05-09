@@ -20,6 +20,7 @@ import AccountabilityManagement from './pages/AccountabilityManagement';
 import Notification from './pages/Notification';
 import TagsManagement from './pages/TagsManagement';
 import ContentManagement from './pages/ContentManagement';
+import UserDetail from './pages/UserDetail';
 
 function App() {
   return (
@@ -31,9 +32,12 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
               <Route path="/" element={<Dashboard />} />
+
               <Route path="/register" element={<Register />} />
               <Route path="/users" element={<Users />} />
+              <Route path="/users/:id" element={<UserDetail />} />
               <Route path="/admins" element={<Admins />} />
+
               <Route path="/courses" >
                 <Route index element={<Courses />} />
                 <Route path="instructors" element={<InstructorManagement/>} />

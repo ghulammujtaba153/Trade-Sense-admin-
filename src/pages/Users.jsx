@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { MdEdit, MdOutlineDelete } from "react-icons/md";
+import { MdEdit, MdOutlineDelete, MdOutlineRemoveRedEye } from "react-icons/md";
 import UserModal from "../components/UserModal";
 import { IoMdPersonAdd } from "react-icons/io";
 import PageLoader from "../components/PageLoader";
@@ -300,6 +300,16 @@ const Users = () => {
                         >
                           <MdEdit className="w-[20px] h-[20px]" />
                         </button>
+
+                        
+
+                        <Link
+                          to={`/users/${user._id}`}
+                          className="block px-4 py-2 text-sm rounded-full text-gray-700 hover:bg-gray-100 w-full text-left"
+                        >
+                          <MdOutlineRemoveRedEye className="w-[20px] h-[20px]" />
+                        </Link>
+
                         <button
                           onClick={() => confirmDelete(user._id, user.name)}
                           className="block px-4 py-2 text-sm rounded-full text-red-600 hover:bg-gray-100 w-full text-left"
