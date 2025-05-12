@@ -118,7 +118,7 @@ export default function CreateNotification() {
 
   const handleSelectUser = (user) => {
     setSelectedUsers((prev) =>
-      prev.some((u) => u.id === user.id) ? prev.filter((u) => u._id !== user._id) : [...prev, user]
+      prev.some((u) => u._id === user._id) ? prev.filter((u) => u._id !== user._id) : [...prev, user]
     )
   }
 
@@ -214,7 +214,7 @@ export default function CreateNotification() {
                     {user.name}
                     <button 
                       type="button" 
-                      onClick={() => removeSelectedUser(user.id)}
+                      onClick={() => removeSelectedUser(user._id)}
                       className="ml-2 text-blue-600 hover:text-blue-800"
                     >
                       <XCircle className="h-4 w-4" />
@@ -227,22 +227,20 @@ export default function CreateNotification() {
             <div className="mt-4 max-h-60 overflow-y-auto border rounded-md p-2">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <div key={user._id} className="flex justify-between items-center py-2 px-2 hover:bg-gray-50 rounded">
+                  <div key={user._id} onClick={() => handleSelectUser(user)} className="cursor-pointer flex justify-between items-center py-2 px-2 hover:bg-gray-50 rounded">
                     <div>
                       <p className="font-medium">{user.name}</p>
                       <p className="text-sm text-gray-500">{user.email}</p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleSelectUser(user)}
-                      className={`px-3 py-1 rounded-md ${
+                    <p
+                      className={`px-3 py-1 rounded-full text-sm ${
                         selectedUsers.some(u => u._id === user._id) 
                           ? 'bg-red-100 text-red-600' 
                           : 'bg-blue-100 text-blue-600'
                       }`}
                     >
                       {selectedUsers.some(u => u._id === user._id) ? "Remove" : "Add"}
-                    </button>
+                    </p>
                   </div>
                 ))
               ) : (

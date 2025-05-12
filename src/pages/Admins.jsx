@@ -194,7 +194,7 @@ const Admins = () => {
                         <option value="user">User</option>
                     </select> */}
 
-                    <select
+                    {/* <select
                         className="border border-gray-300 p-2 rounded-md"
                         value={expFilter}
                         onChange={(e) => setExpFilter(e.target.value)}
@@ -203,7 +203,7 @@ const Admins = () => {
                         <option value="beginner">Beginner</option>
                         <option value="intermediate">Intermediate</option>
                         <option value="advanced">Advanced</option>
-                    </select>
+                    </select> */}
 
                     <select
                         className="border border-gray-300 p-2 rounded-md"

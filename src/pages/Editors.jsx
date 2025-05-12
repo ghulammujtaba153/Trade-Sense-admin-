@@ -184,7 +184,7 @@ const Editors = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <select
+                    {/* <select
                         className="border border-gray-300 p-2 rounded-md"
                         value={roleFilter}
                         onChange={(e) => setRoleFilter(e.target.value)}
@@ -192,7 +192,7 @@ const Editors = () => {
                         <option value="all">All Roles</option>
                         <option value="admin">Admin</option>
                         <option value="editor">Editor</option>
-                    </select>
+                    </select> */}
 
                     {/* <select
                         className="border border-gray-300 p-2 rounded-md"

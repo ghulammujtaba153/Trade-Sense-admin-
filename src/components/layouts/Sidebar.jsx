@@ -18,7 +18,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const { user, logout } = useContext(AuthContext);
   const [expandedMenus, setExpandedMenus] = useState({});
 
-  // Define nav items
   const navItems = [
     {
       name: "Dashboard",
@@ -27,18 +26,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     },
     {
       name: "Users",
-      path: "/users",
+      path: "#",
       icon: <FiUser />,
       subItems: [
+        { name: "Users", path: "/users" },
         { name: "Instructors", path: "/editors" },
         { name: "Admins", path: "/admins" },
       ],
     },
     {
       name: "Courses & Instructors",
-      path: "/courses",
+      path: "#",
       icon: <FiMail />,
       subItems: [
+        { name: "Courses", path: "/courses" },
         { name: "Instructor Management", path: "/courses/instructors" },
         // { name: "Affiliate Program Settings", path: "/courses" },
       ],
@@ -47,9 +48,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     // { name: "Editors", path: "/editors", icon: <RiAdminFill /> },
     {
       name: "Mindfulness Content",
-      path: "/resources",
+      path: "#",
       icon: <RiAdminFill />,
       subItems: [
+        { name: "Resources", path: "/resources" },
         { name: "Pillars & Categories", path: "/pillars/categories" },
         { name: "Manage Content", path: "/content" },
         { name: "Tag Management", path: "/tags" },
@@ -72,9 +74,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     // },
     {
       name: "Accountability Management",
-      path: "/accountability",
+      path: "#",
       icon: <RiAdminFill />,
-      subItems: [{ name: "User Goals & Habits", path: "#" }],
+      subItems: [{ name: "User Goals & Habits", path: "/accountability" }],
     },
     
     {
