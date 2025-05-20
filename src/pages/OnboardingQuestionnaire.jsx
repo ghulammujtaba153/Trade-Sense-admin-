@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL } from './../config/url';
 import { toast } from 'react-toastify';
+import PageLoader from '../components/PageLoader';
 
 const OnboardingQuestionnaire = () => {
   const [questions, setQuestions] = useState([]);
@@ -237,7 +238,7 @@ const OnboardingQuestionnaire = () => {
       )}
 
       {isLoading && !questions.length ? (
-        <div className="text-center py-8">Loading questions...</div>
+        <div className="text-center py-8"><PageLoader/></div>
       ) : (
         <ul className="space-y-4">
           {questions.map((q) => (

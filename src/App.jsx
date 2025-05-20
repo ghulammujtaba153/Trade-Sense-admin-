@@ -21,6 +21,8 @@ import Notification from './pages/Notification';
 import TagsManagement from './pages/TagsManagement';
 import ContentManagement from './pages/ContentManagement';
 import UserDetail from './pages/UserDetail';
+import Main from './pages/DynamicPages/Main';
+import Terms from './pages/DynamicPages/Terms';
 
 function App() {
   return (
@@ -53,11 +55,13 @@ function App() {
               <Route path='/accountability' element={<AccountabilityManagement/>} />
 
               <Route path='/onboarding' element={<OnboardingQuestionnaire/>} />
+              <Route path='/dynamic/pages' element={<Main/>} />
+              
               <Route path="/notifications" element={<Notification/>}/>
             </Route>
           </Route>
           
-          {/* Fallback route */}
+          
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>

@@ -12,6 +12,12 @@ import {
 } from "react-icons/fi";
 import { RiAdminFill } from "react-icons/ri";
 import { AuthContext } from "../../context/AuthContext";
+import { TiDocumentText } from "react-icons/ti";
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { SiMinds } from "react-icons/si";
+import { RiQuestionnaireLine } from "react-icons/ri";
+import { LuUserRoundCheck } from "react-icons/lu";
+
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
@@ -45,11 +51,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       ],
     },
     { name: "Plans", path: "/plans", icon: <FiBell /> },
-    // { name: "Editors", path: "/editors", icon: <RiAdminFill /> },
     {
       name: "Mindfulness Content",
       path: "#",
-      icon: <RiAdminFill />,
+      icon: <SiMinds />,
       subItems: [
         { name: "Resources", path: "/resources" },
         { name: "Pillars & Categories", path: "/pillars/categories" },
@@ -60,45 +65,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     {
       name: "Onboarding Questionnaire",
       path: "/onboarding",
-      icon: <RiAdminFill />,
+      icon: <RiQuestionnaireLine />,
       // subItems: [{ name: "User Analytics", path: "#" }],
     },
-    // {
-    //   name: "Journals",
-    //   path: "#",
-    //   icon: <RiAdminFill />,
-    //   subItems: [
-    //     { name: "View Journals", path: "#" },
-    //     { name: "Analyze User Entries", path: "#" },
-    //   ],
-    // },
     {
       name: "Accountability Management",
       path: "#",
-      icon: <RiAdminFill />,
+      icon: <LuUserRoundCheck />,
       subItems: [{ name: "User Goals & Habits", path: "/accountability" }],
     },
-    
     {
       name: "Push Notifications",
       path: "/notifications",
-      icon: <RiAdminFill />,
-      
+      icon: <IoIosNotificationsOutline />,
     },
-    // {
-    //   name: "Settings",
-    //   path: "#",
-    //   icon: <RiAdminFill />,
-    //   subItems: [
-    //     { name: "App Configuration", path: "#" },
-    //     { name: "Onboarding Questionnaires", path: "#" },
-    //     { name: "Personalization Rules", path: "#" },
-    //   ],
-    // },
-    // { name: "Logs & Activity History", path: "#", icon: <RiAdminFill /> },
+    {
+      name: "Dynamic Pages",
+      path: "/dynamic/pages",
+      icon: <TiDocumentText />,
+    },
+
   ];
 
-  // Expand the menu if current path matches a subItem
+ 
   useEffect(() => {
     const newExpandedMenus = {};
     navItems.forEach((item) => {
