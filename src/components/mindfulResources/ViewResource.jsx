@@ -1,12 +1,39 @@
-// components/minfulResources/ViewResourceModal.jsx
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AudioPlayer from '../player/AudioPlayer';
-import VideoPlayer from '../player/VideoPlayer';
 
 const ViewResourceModal = ({ open, onClose, resource }) => {
+  const videoRef = useRef(null);
+
   if (!resource) return null;
+
+  // Key for localStorage, unique per resource _id
+  const storageKey = `video-progress-${resource._id}`;
+
+  // Load saved time when metadata is loaded
+  const handleLoadedMetadata = () => {
+    const savedTime = localStorage.getItem(storageKey);
+    if (videoRef.current && savedTime) {
+      videoRef.current.currentTime = parseFloat(savedTime);
+    }
+  };
+
+  // Save time periodically while video is playing
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      localStorage.setItem(storageKey, videoRef.current.currentTime);
+      console.log(`Saved at: ${videoRef.current.currentTime}`);
+    }
+  };
+
+ 
+  const handlePause = () => {
+    if (videoRef.current) {
+      localStorage.setItem(storageKey, videoRef.current.currentTime);
+      console.log(`Paused at: ${videoRef.current.currentTime}`);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -21,22 +48,22 @@ const ViewResourceModal = ({ open, onClose, resource }) => {
         <p><strong>Pillar:</strong> {resource.pillar}</p>
         <p><strong>Category:</strong> {resource.category}</p>
         <p><strong>Tags:</strong> {resource.tags.join(', ')}</p>
-        
         <p><strong>Premium:</strong> {resource.isPremium ? 'Yes' : 'No'}</p>
 
         {resource.type === 'audio' ? (
-          // <audio controls className="w-full mt-2">
-          //   <source src={resource.url} type="audio/mpeg" />
-          //   Your browser does not support the audio element.
-          // </audio>
-          <AudioPlayer audio={resource.url}/>
+          <AudioPlayer audio={resource.url} />
         ) : (
-          // <video controls className="w-full mt-2 rounded-lg">
-          //   <source src={resource.url} type="video/mp4" />
-          //   Your browser does not support the video tag.
-            
-          // </video>
-          <VideoPlayer videoUrl={resource.url} />
+          <video
+            controls
+            ref={videoRef}
+            onLoadedMetadata={handleLoadedMetadata}
+            onTimeUpdate={handleTimeUpdate}
+            onPause={handlePause}
+            className="w-full mt-2 rounded-lg"
+          >
+            <source src={resource.url} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         )}
       </DialogContent>
     </Dialog>
